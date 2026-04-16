@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { FontAwesome } from "@expo/vector-icons";
 import { PokemonTypeName } from "@/types";
@@ -10,6 +10,7 @@ import { fetchSinglePokemon } from "@/services/pokemon";
 import { formatPokedexId, getColorsFromImg, lightenColor } from "@/utility";
 import { Pressable, View } from "react-native";
 import Text from "./Text";
+import { useRouter } from "expo-router";
 
 interface Props {
   name: string;
@@ -18,6 +19,9 @@ interface Props {
 
 const PokemonCard = (props: Props) => {
   const { name, url } = props;
+
+  const router = useRouter();
+
   const [data, setData] = useState<any>();
   const [bgColor, setBgColor] = useState<string>();
 
@@ -41,6 +45,12 @@ const PokemonCard = (props: Props) => {
 
   return (
     <Pressable
+      onPress={() => {
+        router.push({
+          pathname: "/pokemon/[id]",
+          params: { id },
+        });
+      }}
       className="rounded-lg pr-4 pl-0 cursor-pointer hover:animate-pulse hover:scale-95 duration-150 ease-out"
       style={{
         backgroundColor: bgColor,
@@ -52,7 +62,7 @@ const PokemonCard = (props: Props) => {
         <View className="px-2 rounded-r-full bg-[#ffffff70] py-1 justify-center">
           <Image src={imageSrc} alt={name} width={80} height={80} />
         </View>
-        <View className="flex flex-col gap-2 w-full py-4">
+        <View className="flex flex-col gap-2  w-[calc(100%-112px)] py-4">
           <View className="flex flex-row items-center gap-4 text-lg font-semibold capitalize">
             <Text style={{ color: TEXT_COLOR }}>#{formatPokedexId(id)}</Text>
             <Text style={{ color: TEXT_COLOR }} className="truncate">
@@ -62,12 +72,14 @@ const PokemonCard = (props: Props) => {
               fill={TEXT_COLOR}
               className="ml-auto hover:scale-130 duration-200"
               size={20}
+              color={TEXT_COLOR}
+              name="star-o"
             />
           </View>
 
-          <View className="flex flex-row gap-2 w-full">
+          <View className="flex flex-row justify-center gap-2 w-full h-fit">
             {types.map((type: PokemonTypeName) => (
-              <TypePill type={type} key={type} />
+              <TypePill type={type} key={type} isOne={types.length === 1} />
             ))}
           </View>
         </View>
@@ -76,4 +88,4 @@ const PokemonCard = (props: Props) => {
   );
 };
 
-export default PokemonCard;
+export default React.memo(PokemonCard);

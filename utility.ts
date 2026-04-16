@@ -44,10 +44,10 @@ export const getColorsFromImg = async (
   let color = "";
   switch (result.platform) {
     case "android":
-      color = result.lightVibrant;
+      color = result.dominant;
       break;
     case "web":
-      color = result.muted;
+      color = result.lightVibrant;
       break;
     case "ios":
       color = result.primary;
@@ -56,5 +56,16 @@ export const getColorsFromImg = async (
       color = "#ccc";
       break;
   }
-  setState(lightenColor(color, 0.1));
+  setState(lightenColor(color, 0.05));
+};
+
+export const getPokemonDescription = (speciesData: any) => {
+  const entry = speciesData.flavor_text_entries
+    .filter((item: any) => item.language.name === "en").splice(1,3)
+    .map((item: any) => item.flavor_text)
+    .join(" | ");
+
+  console.log({ entry });
+
+  return entry?.replace(/\f/g, " ").replace(/\n/g, " ") || "";
 };

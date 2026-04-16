@@ -22,9 +22,14 @@ const PokemonsListPage = () => {
   }, []);
 
   const handleLoadMore = async () => {
+    if (loading || !pokemonList?.next) return;
+
     setLoading(true);
     const nextUrl = pokemonList?.next;
-    await fetchPokemons({ url: nextUrl, setState: setPokemonList });
+    await fetchPokemons({
+      url: nextUrl,
+      setState: setPokemonList,
+    });
     setLoading(false);
   };
 
@@ -35,10 +40,10 @@ const PokemonsListPage = () => {
         numColumns={numColumns}
         style={{ width: "100%" }}
         data={pokemonList?.results}
-        keyExtractor={(pokemon) => pokemon.name}
+        keyExtractor={(pokemon) => pokemon.url}
         onEndReached={handleLoadMore}
         initialNumToRender={20}
-        contentContainerStyle={{ gap: 12, padding: 10, width: "100%" }}
+        contentContainerStyle={{ gap: 12, width: "100%" }}
         columnWrapperStyle={
           numColumns > 1 ? { gap: 12, width: "100%" } : undefined
         }
@@ -46,7 +51,7 @@ const PokemonsListPage = () => {
           <PokemonCard name={item.name} url={item.url} />
         )}
         ListFooterComponent={
-          loading ? <ActivityIndicator size="large" /> : null
+          loading ? <ActivityIndicator color={"#ef5350"} size="large" /> : null
         }
       />
     </View>
