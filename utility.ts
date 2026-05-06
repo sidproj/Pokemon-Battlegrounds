@@ -65,7 +65,5 @@ export const getPokemonDescription = (speciesData: any) => {
     .map((item: any) => item.flavor_text)
     .join(" | ");
 
-  console.log({ entry });
-
   return entry?.replace(/\f/g, " ").replace(/\n/g, " ") || "";
 };

@@ -19,9 +19,7 @@ const PokemonDescription = ({ speciesId }: Props) => {
   if (!species) {
     return null;
   }
-
-  console.log({ entries: species.flavor_text_entries });
-
+ 
   return (
     <View>
       <Text>{getPokemonDescription(species)}</Text>
